@@ -39,7 +39,7 @@ async def get_all_posts():
 
 
 # Create comment for existing post
-@router.post("/comment", response_model=Comment)
+@router.post("/comment", response_model=Comment, status_code=201)
 async def create_comment(comment: CommentIn):
   post = find_post(comment.post_id)
   if not post:
