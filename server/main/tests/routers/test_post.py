@@ -100,7 +100,9 @@ async def test_get_post_with_comments(
 
 @pytest.mark.anyio
 async def test_get_missing_post_with_comments(
-    async_client: AsyncClient, created_post: dict, created_comment: dict
+    async_client: AsyncClient,
+    created_post: dict,  # other posts and comments exist
+    created_comment: dict,
 ):
     response = await async_client.get("/post/2")  # post with id 2 does not exist
 
