@@ -1,6 +1,7 @@
 import pytest
 from httpx import AsyncClient
 
+##### UTILS/HELPERS #####
 
 async def create_post(body: str, async_client: AsyncClient) -> dict:
     response = await async_client.post("/post", json={"body": body})
@@ -16,7 +17,6 @@ async def create_comment(body: str, post_id: int, async_client: AsyncClient) -> 
 
 ##### FIXTURES #####
 
-
 @pytest.fixture()
 async def created_post(async_client: AsyncClient):
     return await create_post("Test Post", async_client)
@@ -26,6 +26,7 @@ async def created_post(async_client: AsyncClient):
 async def created_comment(async_client: AsyncClient, created_post: dict):
     return await create_comment("Test Comment", created_post["id"], async_client)
 
+##### TESTS #####
 
 @pytest.mark.anyio
 async def test_create_post(async_client: AsyncClient):
