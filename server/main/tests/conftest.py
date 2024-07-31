@@ -1,13 +1,14 @@
 # fixtures - share data between multiple tests
-
+import os
 from typing import AsyncGenerator, Generator
 
 import pytest
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
 
+os.environ["ENV_STATE"] = "test"  # Overwrite env for testing
+from main.database import database
 from main.main import app
-from main.routers.post import comment_table, post_table
 
 
 @pytest.fixture(scope="session")
@@ -23,9 +24,9 @@ def client() -> Generator:
 
 @pytest.fixture(autouse=True)
 async def db() -> AsyncGenerator:
-    post_table.clear()
-    comment_table.clear()
+    await database.connect()
     yield
+    await database.disconnect()
 
 
 @pytest.fixture()

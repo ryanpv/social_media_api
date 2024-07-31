@@ -6,7 +6,7 @@ from main.database import database
 from main.routers.post import router as post_router
 
 
-@asynccontextmanager
+@asynccontextmanager  # Connect and disconnect from DB
 async def lifespan(app: FastAPI):
     await database.connect()
     yield
