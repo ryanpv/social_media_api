@@ -6,3 +6,6 @@ __pycache__
 *.db
 .vscode/
 *.png
+main.log
+data.db
+test.db
