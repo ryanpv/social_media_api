@@ -1,0 +1,2 @@
+2024-08-03 14:59:42.124Z | INFO     | main.main:14 - Testing logger
+2024-08-03 14:59:42.129Z | INFO     | uvicorn.error:62 - Application startup complete.
