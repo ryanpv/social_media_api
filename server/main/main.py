@@ -25,7 +25,7 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(post_router)  # prefix="/posts"
 
 
-@app.exception_handler(HTTPException)
+@app.exception_handler(HTTPException)  # track logs for HTTPException
 async def http_exception_handle_logging(request, exc):
     logger.error(f"HTTPException: {exc.status_code} {exc.detail}")
     return await http_exception_handler(request, exc)

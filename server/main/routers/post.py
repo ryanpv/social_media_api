@@ -48,7 +48,12 @@ async def get_all_posts():
 
     logger.debug(query)
 
-    return await database.fetch_all(query)
+    posts = await database.fetch_all(query)
+
+    if not posts:
+        raise HTTPException(status_code=404, detail="No posts found")
+
+    return posts
 
 
 # Create comment for existing post
@@ -77,7 +82,13 @@ async def get_comments_on_post(post_id: int):
 
     logger.debug(query)
 
-    return await database.fetch_all(query)
+    post_comments = await database.fetch_all(query)
+    if not post_comments:
+        raise HTTPException(
+            status_code=404, detail=f"No comments found under post with id: {post_id}"
+        )
+
+    return await post_comments
 
 
 # Get post with its comments
