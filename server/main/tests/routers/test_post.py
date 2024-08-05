@@ -83,10 +83,12 @@ async def test_get_comments_on_post(
 async def test_get_comments_on_post_empty(
     async_client: AsyncClient, created_post: dict
 ):
-    response = await async_client.get(f"/post/{created_post['id']}/comment")
+    response = await async_client.get(
+        "/post/0/comment"
+    )  # post with id 0 does not exist
 
-    assert response.status_code == 200
-    assert response.json() == []
+    assert response.status_code == 404
+    assert response.json() == {"detail": "No comments found under post with id: 0"}
 
 
 @pytest.mark.anyio

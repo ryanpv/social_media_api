@@ -88,7 +88,7 @@ async def get_comments_on_post(post_id: int):
             status_code=404, detail=f"No comments found under post with id: {post_id}"
         )
 
-    return await post_comments
+    return post_comments
 
 
 # Get post with its comments
