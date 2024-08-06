@@ -23,3 +23,23 @@ async def test_register_user_already_exists(async_client, registered_user: dict)
     )
     assert response.status_code == 400
     assert "already exists" in response.json()["detail"]
+
+
+@pytest.mark.anyio
+async def test_login_user_not_exists(async_client: AsyncClient):
+    response = await async_client.post(
+        "/token", json={"email": "test@example.com", "password": "12345678"}
+    )
+    assert response.status_code == 401
+
+
+@pytest.mark.anyio
+async def test_login_user(async_client: AsyncClient, registered_user: dict):
+    response = await async_client.post(
+        "/token",
+        json={
+            "email": registered_user["email"],
+            "password": registered_user["password"],
+        },
+    )
+    assert response.status_code == 200
