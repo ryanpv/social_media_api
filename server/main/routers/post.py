@@ -2,10 +2,12 @@ import logging
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
-from main.database import comment_table, database, post_table
+from main.database import comment_table, database, like_table, post_table
 from main.models.post import (
     Comment,
     CommentIn,
+    PostLike,
+    PostLikeIn,
     UserPost,
     UserPostIn,
     UserPostWithComments,
@@ -36,7 +38,7 @@ async def create_post(
 ):
     logger.info("Creating post")
 
-    data = post.dict()
+    data = {**post.dict(), "user_id": current_user.id}
     query = post_table.insert().values(data)
 
     logger.debug(query)
@@ -74,7 +76,7 @@ async def create_comment(
             status_code=404, detail=f"Post with id: {comment.post_id} not found"
         )
 
-    data = comment.dict()
+    data = {**comment.dict(), "user_id": current_user.id}
     query = comment_table.insert().values(data)
     last_record_id = await database.execute(query)
     return {**data, "id": last_record_id}
@@ -110,3 +112,24 @@ async def get_post_with_comments(post_id: int):
         )
 
     return {"post": post, "comments": await get_comments_on_post(post_id)}
+
+
+@router.post("/like", response_model=PostLike, status_code=201)
+async def like_post(
+    like: PostLikeIn, current_user: Annotated[User, Depends(get_current_user)]
+):
+    logger.info("Liking post")
+
+    post = await find_post(like.post_id)
+    if not post:
+        raise HTTPException(
+            status_code=404, detail=f"Post with id: {like.post_id} not found"
+        )
+
+    data = {**like.dict(), "user_id": current_user.id}
+    query = like_table.insert().values(data)
+
+    logger.debug(query)
+
+    last_record_id = await database.execute(query)
+    return {**data, "id": last_record_id}
