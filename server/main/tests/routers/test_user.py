@@ -40,6 +40,7 @@ async def test_login_user(async_client: AsyncClient, registered_user: dict):
         json={
             "email": registered_user["email"],
             "password": registered_user["password"],
+            "name": "Test name",
         },
     )
     assert response.status_code == 200

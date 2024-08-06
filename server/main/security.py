@@ -1,7 +1,9 @@
 import datetime
 import logging
+from typing import Annotated
 
-from fastapi import HTTPException
+from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
 
@@ -11,6 +13,8 @@ from main.database import database, user_table
 logger = logging.getLogger(__name__)
 
 ALGORITHM = "HS256"
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 pwd_context = CryptContext(schemes=["bcrypt"])
 
 credentials_exception = HTTPException(
@@ -26,7 +30,6 @@ def access_token_expire_minutes() -> int:
 
 def create_access_token(email: str):
     logger.debug("Creating access token", extra={"email": email})
-    print("PWD KEY: ", config.PWD_SECRET_KEY)
     expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
         minutes=access_token_expire_minutes()
     )
@@ -48,7 +51,6 @@ async def get_user(email: str):
 
     query = user_table.select().where(user_table.c.email == email)
     result = await database.fetch_one(query)
-
     if result:
         return result
 
@@ -64,7 +66,7 @@ async def authenticate_user(email: str, password: str):
     return user
 
 
-async def get_current_user(token: str):
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     try:
         payload = jwt.decode(token, key=config.PWD_SECRET_KEY, algorithms=[ALGORITHM])
         email = payload.get("sub")

@@ -8,3 +8,4 @@ class User(BaseModel):
 
 class UserIn(User):
     password: str
+    name: str | None = None
