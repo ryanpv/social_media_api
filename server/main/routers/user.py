@@ -16,7 +16,7 @@ router = APIRouter()
 
 @router.post("/register", status_code=201)
 async def register(user: UserIn):
-    if await get_user(user.email):
+    if await get_user(user.email):  # check if user exists first
         raise HTTPException(
             status_code=400, detail="A user with this email already exists"
         )
