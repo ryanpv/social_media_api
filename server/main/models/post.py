@@ -14,6 +14,12 @@ class UserPost(UserPostIn):
     class Config:
         orm_mode = True  # for returning sql alchemy obj | dict
 
+class UserPostWithLikes(UserPost):
+    likes: int
+
+    class Config:
+        orm_mode = True
+
 
 class CommentIn(BaseModel):
     body: str
@@ -29,8 +35,8 @@ class Comment(CommentIn):
 
 
 class UserPostWithComments(BaseModel):
-  post: UserPost
-  comments: list[Comment]
+    post: UserPostWithLikes
+    comments: list[Comment]
 
 
 class PostLikeIn(BaseModel):
