@@ -38,6 +38,7 @@ async def send_simple_email(to: str, subject: str, body: str):
 
 async def send_user_registration_email(email: str, confirmation_url: str):
     return await send_simple_email(
+        email,
         "Successfully signed up",
         (
             f"Hi {email}! You have successfully signed up to the RV Social REST API."
