@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import (
   BaseModel,  # class that allows us to define model - model validates data
 )
@@ -10,6 +12,7 @@ class UserPostIn(BaseModel):
 class UserPost(UserPostIn):
     id: int
     user_id: int
+    image_url: Optional[str] = None
 
     class Config:
         orm_mode = True  # for returning sql alchemy obj | dict
