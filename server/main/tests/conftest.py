@@ -10,7 +10,7 @@ from httpx import AsyncClient, Request, Response
 os.environ["ENV_STATE"] = "test"  # Overwrite env for testing
 from main.database import database, user_table
 from main.main import app
-from main.tests.helpers import create_post
+from main.tests.helpers import create_post  # noqa: E402
 
 
 @pytest.fixture(scope="session")

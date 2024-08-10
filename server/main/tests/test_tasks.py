@@ -72,7 +72,7 @@ async def test_generate_and_add_to_post_success(
     )
 
     await generate_and_add_to_post(
-        confirmed_user["email"], created_post["id"], "/post/1", db, "A cat"
+        confirmed_user["email"], created_post["id"], "/post/1", db, "A dog"
     )
 
     query = post_table.select().where(post_table.c.id == created_post["id"])

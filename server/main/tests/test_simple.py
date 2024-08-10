@@ -8,5 +8,4 @@ def test_dict_contains():
     x = {"a": 1, "b": 2}
 
     expected = {"a": 1}
-    print(x.items())
     assert expected.items() <= x.items()

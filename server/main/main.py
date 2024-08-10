@@ -1,3 +1,6 @@
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+# This is a workaround to import the main module from the tests directory.
+
 import logging
 from contextlib import asynccontextmanager
 

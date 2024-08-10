@@ -4,7 +4,15 @@ from httpx import AsyncClient
 from main import security
 from main.tests.helpers import create_comment, create_post, like_post
 
+
 ##### FIXTURES #####
+@pytest.fixture()
+def mock_generate_cute_creature_api(mocker):
+    return mocker.patch(
+        "main.tasks._generate_cute_creature_api",
+        return_value={"output_url": "https://example.com/image.jpg"},
+    )
+
 
 @pytest.fixture()
 async def created_comment(
@@ -13,6 +21,7 @@ async def created_comment(
     return await create_comment(
         "Test Comment", created_post["id"], async_client, logged_in_token
     )
+
 
 ##### TESTS #####
 
@@ -35,6 +44,27 @@ async def test_create_post(
         "user_id": confirmed_user["id"],
         "image_url": None,
     }.items() <= response.json().items()
+
+
+@pytest.mark.anyio
+async def test_create_post_with_prompt(
+    async_client: AsyncClient, logged_in_token: str, mock_generate_cute_creature_api
+):
+    body = "Test post"
+
+    response = await async_client.post(
+        "/post?prompt=A dog",
+        json={"body": body},
+        headers={"Authorization": f"Bearer {logged_in_token}"},
+    )
+
+    assert response.status_code == 201
+    assert {
+        "id": 1,
+        "body": body,
+        "image_url": None,
+    }.items() <= response.json().items()
+    mock_generate_cute_creature_api.assert_called()
 
 
 @pytest.mark.anyio

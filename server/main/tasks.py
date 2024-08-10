@@ -84,6 +84,7 @@ async def generate_and_add_to_post(
     except APIResponseError:
         return await send_simple_email(
             email,
+            "Error generating image",
             (
                 "Error generating image",
                 f"Hi {email}! Unfortunately there was an error generating the image"
