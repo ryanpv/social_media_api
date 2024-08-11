@@ -15,5 +15,5 @@ passlib[bcrypt]
 aiofiles
 b2sdk
 httpx
-# psycopg2 # -binary for local
+psycopg2 # -binary for local
 sentry-sdk[fastapi]
