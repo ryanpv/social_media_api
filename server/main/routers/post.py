@@ -51,7 +51,7 @@ async def create_post(
 ):
     logger.info("Creating post")
 
-    data = {**post.dict(), "user_id": current_user.id}
+    data = {**post.model_dump(), "user_id": current_user.id}
     query = post_table.insert().values(data)
 
     logger.debug(query)
@@ -110,7 +110,7 @@ async def create_comment(
             status_code=404, detail=f"Post with id: {comment.post_id} not found"
         )
 
-    data = {**comment.dict(), "user_id": current_user.id}
+    data = {**comment.model_dump(), "user_id": current_user.id}
     query = comment_table.insert().values(data)
     last_record_id = await database.execute(query)
     return {**data, "id": last_record_id}
@@ -164,7 +164,7 @@ async def like_post(
             status_code=404, detail=f"Post with id: {like.post_id} not found"
         )
 
-    data = {**like.dict(), "user_id": current_user.id}
+    data = {**like.model_dump(), "user_id": current_user.id}
     query = like_table.insert().values(data)
 
     logger.debug(query)
