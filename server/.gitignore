@@ -9,3 +9,5 @@ __pycache__
 main.log
 data.db
 test.db
+.env.example
+.pytest_cache
