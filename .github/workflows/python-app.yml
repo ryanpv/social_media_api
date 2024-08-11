@@ -16,6 +16,10 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    
+    env:
+      DEV_PWD_SECRET_KEY: ${{ secrets.DEV_PWD_SECRET_KEY }}
+      TEST_PWD_SECRET_KEY: ${{ secrets.TEST_PWD_SECRET_KEY }}
 
     steps:
     - uses: actions/checkout@v4
