@@ -30,7 +30,7 @@ jobs:
         if [ -f ./server/requirements.txt ]; then pip install -r ./server/requirements.txt; fi
     - name: Lint with ruff
       run: |
-        ruff ./server
+        ruff check ./server
     - name: Test with pytest
       run: |
         pytest
